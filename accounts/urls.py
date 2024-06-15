@@ -12,7 +12,7 @@ from .import views
 
 urlpatterns = [
     path('signup/', signup, name='signup'),
-    path('signin/', signin, name='sigin'),
+    path('signin/', signin, name='signin'),
     path('dashboard/', dashboard, name='dashboard'),
     path('hives/', hives, name='hives'),
     path('subscription/', subscription, name='subscription'),

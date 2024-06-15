@@ -3,8 +3,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .forms import SignUpForm
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django_daraja.mpesa.core import MpesaClient
+from django.contrib.auth import logout
+from .models import Hive
+from .forms import HiveForm
 
 def signup(request):
     if request.method == 'POST':
@@ -15,7 +18,6 @@ def signup(request):
             user = authenticate(username=user.username, password=raw_password)
             login(request, user)
             messages.success(request, 'Signup successful! Please sign in.')
-            return redirect('signin')
     
         return redirect('signin')
     else:
@@ -33,8 +35,6 @@ def signin(request):
         return redirect('dashboard')
     else:
         return render(request, 'signin.html', {'error': 'Invalid credentials. Please try again.'})
-    ''' else:
-        return render(request, 'signin.html') '''
 
 def dashboard(request):
     return render(request, 'dash.html')
@@ -51,13 +51,12 @@ def subscription(request):
 def profile(request):
     return render(request, 'profile.html')
 
+
 def logout(request):
     if request.method == 'POST':
         logout(request)
-        return redirect('login')
-    
+        return redirect('signin')
     return render(request, 'logout.html')
-    return redirect('login')
 
 def settings(request):
     return render(request, 'settings.html')
@@ -99,6 +98,7 @@ def pay_subscription(request):
             return HttpResponse('Failed to initiate payment. Please try again later.')
     else:
         return HttpResponse('Invalid request method.')
+
 
 
 
