@@ -1,0 +1,50 @@
+{% load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{% static 'signup.css' %}">
+    <script src="{% static 'form_validation.js' %}" defer></script>
+</head>
+<body>
+    <div class="header">
+        <h1>Welcome</h1>
+    </div>
+    <div class="social-signup">
+        <p>Register with:</p>
+        <a href="{% url 'social:begin' 'google-oauth2' %}" class="social-btn google">
+            <img src="{% static 'images/google.png' %}" alt="Google">
+        </a>
+    </div>
+    <div class="container">
+        <form action="{% url 'signup' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password1">Password</label>
+                <input type="password" id="password1" name="password1" required>
+            </div>
+            <div class="form-group">
+                <label for="password2">Confirm Password</label>
+                <input type="password" id="password2" name="password2" required>
+            </div>
+            <div class="form-group remember-me">
+                <input type="checkbox" id="remember-me" name="remember-me">
+                <label for="remember-me">Remember Me</label>
+            </div>
+            {% include 'message.html' %}
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+</body>
+</html>

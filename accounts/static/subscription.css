@@ -1,0 +1,92 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #bcb5b5;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.subscription {
+    background-color: white;
+    padding: 70px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.subscription h1, .subscription h2 {
+    margin-top: 0;
+}
+
+.plan {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.plan h2 {
+    margin-top: 0;
+}
+
+.payment-methods form {
+    margin-bottom: 20px;
+}
+
+.payment-option {
+    margin-bottom: 10px;
+}
+
+.payment-option label {
+    margin-left: 10px;
+}
+
+.pay-btn {
+    background-color: #ffc619;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.pay-btn:hover {
+    background-color: #2980b9;
+}
+
+.transactions {
+    margin-top: 20px;
+}
+
+.transactions table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.transactions table, .transactions th, .transactions td {
+    border: 1px solid #ddd;
+}
+
+.transactions th, .transactions td {
+    padding: 10px;
+    text-align: left;
+}
+
+.transactions th {
+    background-color: #f4f4f4;
+}
+@media only screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+}

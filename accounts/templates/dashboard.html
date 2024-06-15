@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bee System Dashboard</title>
+    <link rel="stylesheet" href="{% static 'dash.css' %}">
+   {% comment %}  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> {% endcomment %}
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>SMART NYUKI</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'hives' %}" onclick="showSection('hives')">Hives</a></li>
+                    <li><a href="{% url 'subscription' %}" onclick="showSection('subscription')">Subscription</a></li>
+                    <li><a href="{% url 'profile' %}" onclick="showSection('profile')">Profile</a></li>
+                    <li><a href="{% url 'logout' %}" onclick="showSection('logout')">Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <div class="main-content">
+            <header class="header">
+                <h1>Dashboard</h1>
+                <div class="header-right">
+                    <span><a href="{% url 'settings' %}" onclick="showSection('settings')">SETTINGS</a></span>
+                </div>
+            </header>
+        
+            <div class="dashboard">
+                <section id="hives" class="dashboard-section">
+                    <h2>Hives</h2>
+                    <div class="content">
+                        <canvas id="hivesChart"></canvas>
+                    </div>
+                </section>
+                <section id="subscription" class="dashboard-section" style="display:none;">
+                    <h2>Subscription</h2>
+                    <div class="content">
+                        <p>Manage your subscription details here.</p>
+                        <!-- Add subscription management content here -->
+                    </div>
+                </section>
+                <section id="profile" class="dashboard-section" style="display:none;">
+                    <h2>Profile</h2>
+                    <div class="content">
+                        <p>View and edit your profile information here.</p>
+                        <!-- Add profile management content here -->
+                    </div>
+                </section>
+                <section id="logout" class="dashboard-section" style="display:none;">
+                    <h2>Logout</h2>
+                    <div class="content">
+                        <p>You have been logged out.</p>
+                        <!-- Add logout functionality here -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.dashboard-section');
+            sections.forEach(section => {
+                section.style.display = section.id === sectionId ? 'block' : 'none';
+            });
+        }
+
+        const hivesCtx = document.getElementById('hivesChart').getContext('2d');
+        const hivesChart = new Chart(hivesCtx, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'Honey Production (kg)',
+                    data: [65, 59, 80, 81, 56, 55, 40],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+    
+</body>
+</html>

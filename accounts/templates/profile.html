@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="{% static 'profile.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="profile">
+            <div class="profile-header">
+                <div class="profile-photo">
+                    <img src="{% static 'profile.jpg' %}" alt="Profile Photo">
+                </div>
+                <div class="profile-info">
+                    <h1>John Doe</h1>
+                    <button class="edit-btn">Edit Profile</button>
+                </div>
+            </div>
+            <div class="profile-details">
+                <h2>User Details</h2>
+                <ul>
+                    <li><strong>Email:</strong> johndoe@example.com</li>
+                    <li><strong>Phone:</strong> +123 456 7890</li>
+                    <li><strong>Address:</strong> 123 Bee St, Beetown, BK 11201</li>
+                </ul>
+            </div>
+            <div class="profile-notifications">
+                <h2>Notifications</h2>
+                <ul>
+                    <li>You have a new message.</li>
+                    <li>Your subscription will expire in 10 days.</li>
+                    <li>A new hive has been added to your account.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

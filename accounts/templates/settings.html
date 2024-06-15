@@ -1,0 +1,40 @@
+{% load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beekeeping App Settings</title>
+    <link rel="stylesheet" href="{% static 'settings.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Settings</h1>
+    </header>
+    <div class="container">
+        {% comment %} <form method="post" action="{% url 'save_settings' %}">
+            {% csrf_token %} {% endcomment %}
+            <section class="settings-section">
+                <h2>General Settings</h2>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" value="{{ user.username }}">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}">
+            </section>
+            <section class="settings-section">
+                <h2>Notification Settings</h2>
+                <label for="notifications">Enable Notifications:</label>
+                <input type="checkbox" id="notifications" name="notifications" {% if user.profile.notifications_enabled %}checked{% endif %}>
+                <label for="notification-frequency">Notification Frequency:</label>
+                <select id="notification-frequency" name="notification-frequency">
+                    <option value="daily" {% if user.profile.notification_frequency == 'daily' %}selected{% endif %}>Daily</option>
+                    <option value="weekly" {% if user.profile.notification_frequency == 'weekly' %}selected{% endif %}>Weekly</option>
+                    <option value="monthly" {% if user.profile.notification_frequency == 'monthly' %}selected{% endif %}>Monthly</option>
+                </select>
+            </section>
+            <button type="submit" class="save-button">Save Settings</button>
+        </form>
+    </div>
+</body>
+</html>
