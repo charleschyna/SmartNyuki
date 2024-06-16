@@ -1,7 +1,9 @@
 
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from .forms import SignUpForm
+from django.contrib.auth.models import Group
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django_daraja.mpesa.core import MpesaClient
@@ -12,32 +14,21 @@ from .forms import HiveForm, LoginForm
 def home(request):
     return render(request, 'home.html')
 
+def dashboard(request):
+    return render(request, 'dashboard.html')
+
 def signup(request):
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
+        form = LoginForm(request.POST)
         if form.is_valid():
+            messages.success(request, "Congratulations! - You are successflly SignUped!")
             user = form.save()
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=user.username, password=raw_password)
-            login(request, user)
-            messages.success(request, 'Signup successful! Please sign in.')
-    
+            group = Group.objects.get(name='Author')
+            user.groups.add(group)
         return redirect('signin')
     else:
-        form = SignUpForm()
-        return render(request, 'signup.html', {'form': form})
-
-''' def signin(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('dashboard')
-        return redirect('dashboard')
-    else:
-        return render(request, 'signin.html', {'error': 'Invalid credentials. Please try again.'}) '''
+        form = LoginForm()
+    return render(request, 'signup.html',{'form':form})
 
 def signin(request):
     if request.method == 'POST':
@@ -54,11 +45,6 @@ def signin(request):
         form = LoginForm()
     return render(request, 'signin.html', {'form': form})
 
-def dashboard(request):
-    return render(request, 'dash.html')
-
-def dashboard(request):
-    return render(request, 'dashboard.html')
 
 def hives(request):
     return render(request, 'hives.html')

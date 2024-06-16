@@ -20,7 +20,7 @@
         </a>
     </div>
     <div class="container">
-        <form action="{% url 'signup' %}" method="post">
+        <form action="{% url 'signup' %}" method="post" novalidate>
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">Username</label>

@@ -95,8 +95,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'signin'
 
 WSGI_APPLICATION = 'SmartNyuki.wsgi.application'
 
