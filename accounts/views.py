@@ -1,8 +1,15 @@
-
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from .forms import SignUpForm
+from datetime import datetime
+from django.views.decorators.csrf import csrf_exempt
+import json, base64
+from django.urls import reverse
+from django.views.generic import View
+import requests
+from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
@@ -10,6 +17,7 @@ from django_daraja.mpesa.core import MpesaClient
 from django.contrib.auth import logout
 from .models import Hive
 from .forms import HiveForm, LoginForm
+
 
 def home(request):
     return render(request, 'home.html')
@@ -65,43 +73,42 @@ def logout(request):
 def settings(request):
     return render(request, 'settings.html')
 
-def index(request):
+@csrf_exempt
+def mpesa_stk_push(request):
     if request.method == 'POST':
-        cl = MpesaClient() 
-        phone_number = '0713881169' 
-        amount = 1 
-        account_reference = 'reference' 
-        transaction_desc = 'Description'
-        callback_url = 'https://api.darajambili.com/express-payment' 
+        amount = request.POST.get('amount')  # Assuming amount is passed from the form
+        phone_number = request.POST.get('phone_number')  # Get phone number from form or session
 
-        response = cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
-        
-        if response.get('ResponseCode') == '0':
-            return HttpResponse('Payment request sent successfully. Check your phone for the prompt.')
+        # Construct the request payload for M-Pesa STK push
+        payload = {
+            'BusinessShortCode': settings.MPESA_SHORTCODE,
+            'Password': settings.MPESA_PASSWORD,
+            'Timestamp': datetime.now().strftime('%Y%m%d%H%M%S'),
+            'TransactionType': 'CustomerPayBillOnline',
+            'Amount': amount,
+            'PartyA': phone_number,  # Customer's phone number
+            'PartyB': settings.MPESA_SHORTCODE,
+            'PhoneNumber': phone_number,  # Customer's phone number
+            'CallBackURL': settings.MPESA_CALLBACK_URL,
+            'AccountReference': 'YourAppName',
+            'TransactionDesc': 'Payment for Premium Plan',
+        }
+
+        # Make request to M-Pesa API
+        response = requests.post(settings.MPESA_STK_PUSH_URL, json=payload, headers={
+            'Authorization': 'Bearer {}'.format(get_access_token()),  # Implement get_access_token() function
+            'Content-Type': 'application/json'
+        })
+
+        # Process M-Pesa API response
+        if response.status_code == 200:
+            # Payment request successfully initiated
+            return HttpResponse("Payment request initiated successfully.")
         else:
-            return HttpResponse('Failed to initiate payment. Please try again later.')
-
-    return render(request, 'index.html')
-
-def pay_subscription(request):
-    if request.method == 'POST':
-        cl = MpesaClient()
-    
-        phone_number = '0713881169'
-        amount = 1
-        account_reference = 'reference'
-        transaction_desc = 'Description'
-        callback_url = 'https://api.darajambili.com/express-payment'
-    
-        response = cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
-    
-        if response.get('ResponseCode') == '0':
-            return HttpResponse('Payment request sent successfully. Check your phone for the prompt.')
-        else:
-            return HttpResponse('Failed to initiate payment. Please try again later.')
+            # Handle errors appropriately
+            return HttpResponse("Failed to initiate payment request. Error: {}".format(response.text), status=response.status_code)
     else:
-        return HttpResponse('Invalid request method.')
-
+        return HttpResponse(status=405)  # Method not allowed
 
 
         

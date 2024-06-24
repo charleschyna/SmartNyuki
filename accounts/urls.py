@@ -7,7 +7,7 @@ from .views import subscription
 from .views import profile
 from .views import logout
 from .views import settings
-from django.contrib.auth import views as auth_views
+from .views import mpesa_stk_push
 from .import views
 
 urlpatterns = [
@@ -20,6 +20,5 @@ urlpatterns = [
     path('profile/', profile, name='profile'),
     path('settings/', settings, name='settings'),
     path('logout/', logout, name='logout'),
-    path('index/', views.index, name='index'),
-    path('pay/', views.pay_subscription, name='pay_subscription'),
+    path('index/', mpesa_stk_push, name='mpesa_stk_push'),
 ]
