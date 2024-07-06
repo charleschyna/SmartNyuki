@@ -13,13 +13,27 @@ body {
 .header {
     width: 100%;
     background-color: #ffc619;
-     color: white;
-    padding: 150px 0;
+    color: white;
+    padding: 100px 0;
     text-align: center;
     margin-bottom: 20px;
-    margin-top: 0px;
+    margin-top: 0;
+    position: relative; /* Ensure relative positioning for absolute elements */
+    overflow: hidden; /* Hide overflowing animation */
 }
 
+
+
+@keyframes wind {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+  
 .social-signup {
     text-align: center;
     margin-bottom: 20px;
@@ -40,8 +54,8 @@ body {
 }
 
 .social-btn img {
-    width: 20px;
-    height: 20px;
+    width: 40px;
+    height: 40px;
     margin-right: 10px;
 
     
@@ -56,8 +70,8 @@ body {
 }
 
 .container {
-    background-color: #fff;
-    padding: 20px;
+    background-color: #D9D9D9;
+    padding: 70px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 300px;

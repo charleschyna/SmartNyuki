@@ -13,93 +13,30 @@ import base64
 import json
 from .models import Hive
 
-class SignUpForm(UserCreationForm):
-    email = forms.EmailField(max_length=254, required=True, help_text='Required. Enter a valid email address.')
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class':'form-control'}))
-    password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput(attrs={'class':'form-control'}))
+class SignUpForm(forms.Form):
+    username = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput())
+    password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput())
+    remember_me = forms.BooleanField(required=False)
 
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password1', 'password2')
-    
-    widgets = {
-            'username':forms.TextInput(attrs={'class':'form-control '}),
-            'email':forms.TextInput(attrs={'class':'form-control '}),
-            'password1':forms.TextInput(attrs={'class':'form-control'}),
-            'password2':forms.EmailInput(attrs={'class':'form-control'}),
-            }
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Passwords do not match.")
+
+        return cleaned_data
         
 class LoginForm(AuthenticationForm):
-    username = UsernameField(widget=forms.TextInput(attrs={'autofocus':True, 'class':'form-control'}))
-    password = forms.CharField(label=("Password"), strip=False, widget=forms.PasswordInput(attrs={'autocomplete':'current-password', 'class':'form-control'}))
+        Email = forms.EmailField(widget=forms.TextInput(attrs={'autocomplete': 'email'}), required=True)
+        password = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}), required=True)
 
-class PaySubscription(View):
-    def post(self, request):
-        phone_number = request.POST.get('phone_number')
-        amount = 9999.99  # Amount for the subscription
 
-        # Prepare the necessary credentials and endpoint URLs
-        consumer_key = settings.MPESA_CONSUMER_KEY
-        consumer_secret = settings.MPESA_CONSUMER_SECRET
-        shortcode = settings.MPESA_SHORTCODE
-        lipa_na_mpesa_online_url = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
-        token_url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
 
-        # Get the access token
-        response = requests.get(token_url, auth=(consumer_key, consumer_secret))
-        access_token = response.json().get('access_token')
-
-        # Prepare the headers
-        headers = {
-            'Authorization': f'Bearer {access_token}',
-            'Content-Type': 'application/json',
-        }
-
-        # Generate the password
-        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-        passkey = settings.MPESA_PASSKEY
-        data_to_encode = f'{shortcode}{passkey}{timestamp}'
-        encoded_string = base64.b64encode(data_to_encode.encode('utf-8')).decode('utf-8')
-
-        # Prepare the payload
-        payload = {
-            'BusinessShortCode': shortcode,
-            'Password': encoded_string,
-            'Timestamp': timestamp,
-            'TransactionType': 'CustomerPayBillOnline',
-            'Amount': amount,
-            'PartyA': phone_number,
-            'PartyB': shortcode,
-            'PhoneNumber': phone_number,
-            'CallBackURL': request.build_absolute_uri(reverse('mpesa_callback')),
-            'AccountReference': 'Subscription',
-            'TransactionDesc': 'Payment for subscription',
-        }
-
-        # Send the STK push request
-        response = requests.post(lipa_na_mpesa_online_url, headers=headers, json=payload)
-        response_data = response.json()
-
-        if response_data.get('ResponseCode') == '0':
-            # Successfully initiated
-            return redirect('subscription_success')
-        else:
-            # Handle the error case
-            return redirect('subscription_failed')
-        
-class MpesaCallback(View):
-    def post(self, request):
-        # Safaricom sends the data in JSON format
-        mpesa_response = json.loads(request.body.decode('utf-8'))
-
-        # Extract useful data from the response
-        result_code = mpesa_response['Body']['stkCallback']['ResultCode']
-        result_desc = mpesa_response['Body']['stkCallback']['ResultDesc']
-        # Save this information to your database as needed
-
-        return JsonResponse({'status': 'ok'})
-
-class HiveForm(forms.ModelForm):
+''' class HiveForm(forms.ModelForm):
     class Meta:
         model = Hive
-        fields = ['name', 'temperature', 'humidity', 'sound', 'weight']
+        fields = ['name', 'temperature', 'humidity', 'sound', 'weight'] '''

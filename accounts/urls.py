@@ -5,10 +5,13 @@ from .views import dashboard
 from .views import hives
 from .views import subscription
 from .views import profile
+from .views import save_token
 from .views import logout
 from .views import settings
-from .views import mpesa_stk_push
+from .views import password_reset
 from .import views
+from django.conf.urls.static import static
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('home/', views.home, name='home'),
@@ -20,5 +23,7 @@ urlpatterns = [
     path('profile/', profile, name='profile'),
     path('settings/', settings, name='settings'),
     path('logout/', logout, name='logout'),
-    path('index/', mpesa_stk_push, name='mpesa_stk_push'),
+    path('reset_password/', views.password_reset, name='reset_password'),
+    path('save-token/', views.save_token, name='save_token'),
+    path('api/initiate_payment/', views.initiate_payment, name='initiate_payment'),
 ]

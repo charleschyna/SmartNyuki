@@ -4,38 +4,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Page</title>
-    <link rel="stylesheet" href="{% static 'profile.css' %}">
+    <title>Profile</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <div class="profile">
-            <div class="profile-header">
-                <div class="profile-photo">
-                    <img src="{% static 'profile.jpg' %}" alt="Profile Photo">
-                </div>
-                <div class="profile-info">
-                    <h1>John Doe</h1>
-                    <button class="edit-btn">Edit Profile</button>
-                </div>
+        <div class="sidebar">
+            <div class="image-container">
+                <img src="{% static 'Smart Nyuki1.jpeg' %}" alt="Company Logo" class="responsive-image">
             </div>
-            <div class="profile-details">
-                <h2>User Details</h2>
+            <div class="sidebar-menu">
                 <ul>
-                    <li><strong>Email:</strong> johndoe@example.com</li>
-                    <li><strong>Phone:</strong> +123 456 7890</li>
-                    <li><strong>Address:</strong> 123 Bee St, Beetown, BK 11201</li>
+                    <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="{% url 'hives' %}"><i class="fas fa-box"></i> Hives</a></li>
+                    <li><a href="{% url 'subscription' %}"><i class="fas fa-credit-card"></i> Subscription</a></li>
+                    <li><a href="{% url 'profile' %}" class="active"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Log Out</a></li>
                 </ul>
             </div>
-            <div class="profile-notifications">
-                <h2>Notifications</h2>
-                <ul>
-                    <li>You have a new message.</li>
-                    <li>Your subscription will expire in 10 days.</li>
-                    <li>A new hive has been added to your account.</li>
-                </ul>
+            <div class="documentation">
+                <p>Need help? Please check our docs</p>
+                <button>Documentation</button>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <h1>Profile</h1>
+            </div>
+            <div class="content">
+                <div class="profile">
+                    <div class="profile-header">
+                        <div class="profile-photo">
+                            <img src="{% static 'images/profile.png' %}" alt="Profile Photo" class="responsive-image">
+                        </div>
+                        <div class="profile-info">
+                            <h1>John Doe</h1>
+                            <button class="edit-btn">Edit Profile</button>
+                        </div>
+                    </div>
+                    <div class="profile-details">
+                        <h2>User Details</h2>
+                        <ul>
+                            <li><strong>Email:</strong> johndoe@example.com</li>
+                            <li><strong>Phone:</strong> +254700000000</li>
+                            <li><strong>Address:</strong> Gatundu-Juja, Juja, Kiambu</li>
+                        </ul>
+                    </div>
+                    <div class="profile-notifications">
+                        <h2>Notifications</h2>
+                        <ul>
+                            <li>You have a new message.</li>
+                            <li>Your subscription will expire in 10 days.</li>
+                            <li>A new hive has been added to your account.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                &copy; 2024 Smart Nyuki. All Rights Reserved. <a href="https://www.smartabee.netlify.app.com">Privacy Policy</a>
             </div>
         </div>
     </div>
+    <script src="{% static 'scripts.js' %}"></script>
 </body>
 </html>

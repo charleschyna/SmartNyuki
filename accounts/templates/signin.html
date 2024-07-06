@@ -1,29 +1,37 @@
-{% load static%}
+{%load static%}
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign in</title>
-    <link rel="stylesheet" href="{% static 'signin.css' %}">
-</head>
-<body>
-    <div class="container">
-        <form class="form" method="post" action="{% url 'signin' %}">
-        <form class="form" method="post">
-            {% csrf_token %}
-            <h2>Welcome Back</h2>
-            <div class="form-group">
-                <label for="username">Email</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit">Sign in</button>
-        </form>
-    </div>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign In</title>
+        <link rel="stylesheet" href="{% static 'signin.css' %}">
+    </head>
+    <body>
+        <div class="container">
+            <form class="form" method="POST">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <h2>Welcome Back</h2>
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}">Email</label>
+                    {{ form.username }}
+                    {{ form.username.errors }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.password.id_for_label }}">Password</label>
+                    {{ form.password }}
+                    {{ form.password.errors }}
+                </div>
+                <button type="submit">Sign In</button>
+                <p>Don't have an account?
+                    <span><a href="{% url 'signup' %}">Sign Up</a></span>
+                </p>
+                <p>Forgot Password?
+                    <span><a href="{% url 'password_reset' %}">Reset</a></span>
+                </p>
+            </form>
+        </div>
+    </body>
 </html>

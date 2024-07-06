@@ -1,0 +1,413 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: visible; /*Prevents Scrolling*/
+}
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.sidebar {
+    width: 150px;
+    background-color: #ffc619;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: right;
+}
+.image-container {
+    width: 50%; /* or any specific width */
+    height: 70px; /* or any specific height */
+    overflow: hidden;
+}
+
+.image-container img {
+    width: 90%;
+    height: 90%;
+    object-fit: scale-down;/* other options: contain, fill, scale-down, none */
+    object-position: left;
+}
+.sidebar-menu {
+    flex: 1;
+}
+
+.sidebar-menu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar-menu ul li {
+    margin: 10px 0;
+}
+
+.sidebar-menu ul li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.sidebar-menu ul li a.active,
+.sidebar-menu ul li a:hover {
+    background-color: #c09103;
+    color: white;
+}
+
+.documentation {
+    background-color: #c09103;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+}
+
+.documentation button {
+    background: none;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.header {
+    margin-bottom: 20px;
+}
+
+.overview {
+    display: flex;
+    flex-direction: column;
+}
+
+.overview-item {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.chart-container {
+    width: 200%;
+    max-height: fit-content(100%);
+    max-width: 700px;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+}
+
+.hive-info {
+    margin: 20px 0;
+}
+
+.hive {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    flex: 1;
+    min-width: 200px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th,
+table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+table th {
+    background-color: #f2f2f2;
+}
+
+.profile {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-photo img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.profile-info {
+    margin-left: 20px;
+}
+
+.profile-info h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.edit-btn {
+    background-color: #ffc619;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.edit-btn:hover {
+    background-color: #c09103;
+}
+
+.profile-details,
+.profile-notifications {
+    margin-bottom: 20px;
+}
+
+.profile-details h2,
+.profile-notifications h2 {
+    margin-top: 0;
+}
+
+.profile-details ul,
+.profile-notifications ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.profile-details ul li,
+.profile-notifications ul li {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.subscription {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.subscription h1, .subscription h2 {
+    margin-top: 0;
+}
+
+.plan {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.plan h2 {
+    margin-top: 0;
+}
+
+.payment-methods form {
+    margin-bottom: 20px;
+}
+
+.payment-option {
+    margin-bottom: 10px;
+}
+
+.payment-option label {
+    margin-left: 10px;
+}
+
+.pay-btn {
+    background-color: #ffc619;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.pay-btn:hover {
+    background-color: #c09103;
+}
+
+.transactions {
+    margin-top: 20px;
+}
+
+.transactions table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.transactions table, .transactions th, .transactions td {
+    border: 1px solid #ddd;
+}
+
+.transactions th, .transactions td {
+    padding: 10px;
+    text-align: left;
+}
+
+.transactions th {
+    background-color: #f4f4f4;
+}
+.footer {
+    position: bottom;
+    bottom: 0;
+    width: 100%;
+    text-align: left;
+    padding: 10px 0;
+    background-color: none;
+    color: #333;
+}
+.footer a {
+    color: #4caf50;
+    text-decoration: none;
+}
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* Media Queries for Responsiveness */
+@media (min-width: 768px) {
+    body {
+        flex-direction: row;
+    }
+
+    .sidebar {
+        width: 250px;
+       
+    }
+
+    .main-content {
+        flex: 1;
+        padding: 20px;
+    }
+
+    .overview {
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .overview-item {
+        width: 48%;
+    }
+
+    .charts {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .chart {
+        width: 48%;
+    }
+}
+
+#menu-toggle {
+    display: none;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+button {
+    background-color: #ffc619;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #c09103;
+}
+
+/* Sidebar Active State */
+.sidebar.active {
+    transform: translateX(0);
+}
+
+@media (min-width: 1024px) {
+    .sidebar {
+        width: 300px;
+    }
+
+    .overview-item,
+    .chart {
+        width: 48%;
+    }
+    .charts {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .chart {
+        width: 48%;
+    }
+}
+#menu-toggle {
+    display: none;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+button {
+    background-color: #ffc619;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #c09103;
+}
+
+.footer {
+    position: bottom;
+    bottom: 0;
+    width: 100%;
+    text-align: left;
+    padding: 10px 0;
+    background-color: none;
+    color: #333;
+}
+.footer a {
+    color: #4caf50;
+    text-decoration: none;
+}
+.footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    .logo img {
+        width: 80px;
+    }
+}

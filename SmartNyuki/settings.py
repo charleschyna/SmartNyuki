@@ -14,6 +14,7 @@ import os
 
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -99,6 +100,9 @@ LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'signin'
 
 WSGI_APPLICATION = 'SmartNyuki.wsgi.application'
+
+# settings.py
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # Database
@@ -198,3 +202,12 @@ MPESA_INITIATOR_USERNAME = 'initiator_username'
 # Plaintext password for initiator (to be used in B2C, B2B, AccountBalance and TransactionStatusQuery Transactions)
 
 MPESA_INITIATOR_SECURITY_CREDENTIAL = 'initiator_security_credential'
+
+# settings.py
+
+MPESA_SHORTCODE = 'YourMpesaShortcode'
+MPESA_PASSWORD = 'YourMpesaPassword'
+MPESA_CALLBACK_URL = 'http://yourdomain.com/mpesa/callback-url'  # Replace with your actual callback URL
+MPESA_ACCESS_TOKEN = 'YourMpesaAccessToken'
+
+STATIC_URL = '/static/'
