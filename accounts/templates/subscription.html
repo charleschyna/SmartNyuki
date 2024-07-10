@@ -13,13 +13,13 @@
     <div class="container">
         <div class="sidebar">
             <div class="image-container">
-                <img src="{% static 'Smart Nyuki1.jpeg' %}" alt="Company Logo" class="responsive-image">
+                <img src="{% static 'images/SmartNyuki.png' %}" alt="Company Logo" class="responsive-image">
             </div>
             <div class="sidebar-menu">
                 <ul>
                     <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="{% url 'hives' %}" class="active"><i class="fas fa-box"></i> Hives</a></li>
-                    <li><a href="{% url 'subscription' %}"><i class="fas fa-credit-card"></i> Subscription</a></li>
+                    <li><a href="{% url 'hives' %}"><i class="fas fa-box"></i> Hives</a></li>
+                    <li><a href="{% url 'subscription' %}" class="active"><i class="fas fa-credit-card"></i> Subscription</a></li>
                     <li><a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a></li>
                     <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Log Out</a></li>
                 </ul>
@@ -58,30 +58,51 @@
     </div>
     <script src="{% static 'scripts.js' %}"></script>
     <script>
-        document.getElementById('pay-now-btn').addEventListener('click', function() {
-            fetch('{% url 'initiate_payment' %}', {  // Replace with your URL name for initiating payment
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'  // Ensure CSRF token is included
-                },
-                body: JSON.stringify({
-                    payment_method: 'mpesa'
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Payment initiated. Please confirm on your phone.');
-                    // Optionally, you can redirect or show a success message
-                } else {
-                    alert('Failed to initiate payment. Please try again.');
-                }
-            })
-            .catch(error => {
-                console.error('Error initiating payment:', error);
-                alert('Error initiating payment. Please try again.');
-            });
+        document.addEventListener('DOMContentLoaded', function() {
+            const payNowBtn = document.getElementById('pay-now-btn');
+            if (payNowBtn) {
+                payNowBtn.addEventListener('click', function() {
+                    payNowBtn.disabled = true;
+                    payNowBtn.textContent = 'Processing...';
+
+                    fetch('{% url 'initiate_payment' %}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({
+                            payment_method: 'mpesa'
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Payment initiated. Please confirm on your phone.');
+                            // Optionally, redirect or show a success message
+                        } else {
+                            alert('Failed to initiate payment. Please try again.');
+                            payNowBtn.disabled = false;
+                            payNowBtn.textContent = 'Pay Now';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error initiating payment:', error);
+                        alert('Error initiating payment. Please try again.');
+                        payNowBtn.disabled = false;
+                        payNowBtn.textContent = 'Pay Now';
+                    });
+                });
+            }
+
+            // Example for canvas context error handling
+            const canvas = document.getElementById('yourCanvasId');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                // Your canvas drawing code
+            } else {
+                console.error('Canvas element with ID "yourCanvasId" not found.');
+            }
         });
     </script>
 </body>

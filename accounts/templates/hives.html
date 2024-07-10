@@ -7,12 +7,15 @@
     <title>Hives</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="sidebar">
             <div class="image-container">
-                <img src="{% static 'Smart Nyuki1.jpeg' %}" alt="Company Logo" class="responsive-image">
+                <img src="{% static 'images/SmartNyuki.png' %}" alt="Company Logo" class="responsive-image">
             </div>
             <div class="sidebar-menu">
                 <ul>
@@ -45,45 +48,65 @@
                                     <th>Weight(kgs)</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>HIVE 1</td>
-                                    <td>33</td>
-                                    <td>56</td>
-                                    <td>73</td>
-                                    <td>15.4</td>
-                                </tr>
-                                <tr>
-                                    <td>HIVE 2</td>
-                                    <td>32.5</td>
-                                    <td>55</td>
-                                    <td>73</td>
-                                    <td>15.3</td>
-                                </tr>
-                                <!-- Add other hive rows here -->
+                            <tbody id="hiveTableBody">
+                                <!-- Hive data will be populated here from Firebase -->
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <button onclick="document.getElementById('hiveForm').style.display = 'block'">Add New Hive</button>
-                <form id="hiveForm" style="display: none;" onsubmit="addNewHive(event)">
-                    <h3>New Hive Details</h3>
-                    <label for="newTemp">Temperature:</label>
-                    <input type="text" id="newTemp" required><br>
-                    <label for="newHumidity">Humidity:</label>
-                    <input type="text" id="newHumidity" required><br>
-                    <label for="newSound">Sound:</label>
-                    <input type="text" id="newSound" required><br>
-                    <label for="newWeight">Weight:</label>
-                    <input type="text" id="newWeight" required><br>
-                    <button type="submit">Add Hive</button>
-                </form>
+                <button onclick="fetchHiveData()">Add New Hive</button>
             </div>
             <div class="footer">
                 &copy; 2024 Smart Nyuki. All Rights Reserved. <a href="https://www.smartabee.netlify.app.com">Privacy Policy</a>
             </div>
         </div>
     </div>
-    <script src="{% static 'scripts.js' %}"></script>
+    <script>
+        // Your Firebase configuration
+        const firebaseConfig = {
+            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+            apiKey: "AIzaSyCiraum9gVPXkgP3KgEXk3WMhEb64XZjZE",
+            authDomain: "project-login2-6c049.firebaseapp.com",
+            projectId: "project-login2-6c049",
+            storageBucket: "project-login2-6c049.appspot.com",
+            messagingSenderId: "865918979599",
+            appId: "1:865918979599:web:b0cb8e55945a81921d9d7a"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Reference to the database
+        const db = firebase.database();
+
+        // Function to fetch and display hive data
+        function fetchHiveData() {
+            console.log('Fetching hive data...');
+            db.ref('hives').once('value').then((snapshot) => {
+                const hives = snapshot.val();
+                console.log('Hive data:', hives);
+                const hiveTableBody = document.getElementById('hiveTableBody');
+                hiveTableBody.innerHTML = '';
+                for (const hiveId in hives) {
+                    const hive = hives[hiveId];
+                    const row = `
+                        <tr>
+                            <td>${hiveId}</td>
+                            <td>${hive.temperature}</td>
+                            <td>${hive.humidity}</td>
+                            <td>${hive.sound}</td>
+                            <td>${hive.weight}</td>
+                        </tr>
+                    `;
+                    hiveTableBody.innerHTML += row;
+                }
+            }).catch(error => {
+                console.error('Error fetching hive data:', error);
+            });
+        }
+
+        // Call fetchHiveData when the page loads
+        window.onload = fetchHiveData;
+    </script>
 </body>
 </html>
