@@ -81,7 +81,7 @@
 
         // Function to fetch and display hive data
         function fetchHiveData() {
-            console.log('Listening for hive data changes...');
+            console.log('Fetching hive data...');
             db.ref('hives').on('value', (snapshot) => {
                 const hives = snapshot.val();
                 console.log('Hive data:', JSON.stringify(hives, null, 2));
