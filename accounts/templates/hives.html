@@ -54,7 +54,7 @@
                         </table>
                     </div>
                 </div>
-                <button onclick="fetchHiveData()">Add New Hive</button>
+                <button onclick="addNewHive()">Add New Hive</button>
             </div>
             <div class="footer">
                 &copy; 2024 Smart Nyuki. All Rights Reserved. <a href="https://www.smartabee.netlify.app.com">Privacy Policy</a>
@@ -81,8 +81,8 @@
 
         // Function to fetch and display hive data
         function fetchHiveData() {
-            console.log('Fetching hive data...');
-            db.ref('hives').once('value').then((snapshot) => {
+            console.log('Listening for hive data changes...');
+            db.ref('hives').on('value', (snapshot) => {
                 const hives = snapshot.val();
                 console.log('Hive data:', JSON.stringify(hives, null, 2));
                 const hiveTableBody = document.getElementById('hiveTableBody');
@@ -91,10 +91,13 @@
                     if (hives.hasOwnProperty(hiveId)) {
                         const hive = hives[hiveId];
                         console.log(`Hive ${hiveId} data:`, JSON.stringify(hive, null, 2));
-                        const temperature = hive.temperature ? hive.temperature.value : 'N/A';
-                        const humidity = hive.humidity ? hive.humidity.value : 'N/A';
-                        const soundLevel = hive.soundLevel ? hive.soundLevel.value : 'N/A';
-                        const weight = hive.weight ? hive.weight.value : 'N/A';
+                        
+                        // Access the values directly
+                        const temperature = hive.temperature !== undefined ? hive.temperature.value : 'N/A';
+                        const humidity = hive.humidity !== undefined ? hive.humidity.value : 'N/A';
+                        const soundLevel = hive.soundLevel !== undefined ? hive.soundLevel.value : 'N/A';
+                        const weight = hive.weight !== undefined ? hive.weight.value : 'N/A';
+
                         const row = `
                             <tr>
                                 <td>${hiveId}</td>
@@ -107,13 +110,17 @@
                         hiveTableBody.innerHTML += row;
                     }
                 }
-            }).catch(error => {
-                console.error('Error fetching hive data:', error);
             });
         }
 
         // Call fetchHiveData when the page loads
         window.onload = fetchHiveData;
+
+        // Placeholder function to add a new hive (implement as needed)
+        function addNewHive() {
+            // Code to add a new hive
+            console.log('Add new hive functionality goes here.');
+        }
     </script>
 </body>
 </html>
