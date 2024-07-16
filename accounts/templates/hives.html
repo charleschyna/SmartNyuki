@@ -64,7 +64,7 @@
     <script>
         // Your Firebase configuration
         const firebaseConfig = {
-            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+            databaseURL: "https://project-login2-6c049-default-rtdb.europe-west1.firebasedatabase.app/",
             apiKey: "AIzaSyCiraum9gVPXkgP3KgEXk3WMhEb64XZjZE",
             authDomain: "project-login2-6c049.firebaseapp.com",
             projectId: "project-login2-6c049",
@@ -84,21 +84,28 @@
             console.log('Fetching hive data...');
             db.ref('hives').once('value').then((snapshot) => {
                 const hives = snapshot.val();
-                console.log('Hive data:', hives);
+                console.log('Hive data:', JSON.stringify(hives, null, 2));
                 const hiveTableBody = document.getElementById('hiveTableBody');
                 hiveTableBody.innerHTML = '';
                 for (const hiveId in hives) {
-                    const hive = hives[hiveId];
-                    const row = `
-                        <tr>
-                            <td>${hiveId}</td>
-                            <td>${hive.temperature}</td>
-                            <td>${hive.humidity}</td>
-                            <td>${hive.sound}</td>
-                            <td>${hive.weight}</td>
-                        </tr>
-                    `;
-                    hiveTableBody.innerHTML += row;
+                    if (hives.hasOwnProperty(hiveId)) {
+                        const hive = hives[hiveId];
+                        console.log(`Hive ${hiveId} data:`, JSON.stringify(hive, null, 2));
+                        const temperature = hive.temperature ? hive.temperature.value : 'N/A';
+                        const humidity = hive.humidity ? hive.humidity.value : 'N/A';
+                        const soundLevel = hive.soundLevel ? hive.soundLevel.value : 'N/A';
+                        const weight = hive.weight ? hive.weight.value : 'N/A';
+                        const row = `
+                            <tr>
+                                <td>${hiveId}</td>
+                                <td>${temperature}</td>
+                                <td>${humidity}</td>
+                                <td>${soundLevel}</td>
+                                <td>${weight}</td>
+                            </tr>
+                        `;
+                        hiveTableBody.innerHTML += row;
+                    }
                 }
             }).catch(error => {
                 console.error('Error fetching hive data:', error);
