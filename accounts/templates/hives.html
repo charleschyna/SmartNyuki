@@ -7,7 +7,6 @@
     <title>Hives</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
 </head>
@@ -62,7 +61,6 @@
         </div>
     </div>
     <script>
-        // Your Firebase configuration
         const firebaseConfig = {
             databaseURL: "https://project-login2-6c049-default-rtdb.europe-west1.firebasedatabase.app/",
             apiKey: "AIzaSyCiraum9gVPXkgP3KgEXk3WMhEb64XZjZE",
@@ -73,54 +71,65 @@
             appId: "1:865918979599:web:b0cb8e55945a81921d9d7a"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-
-        // Reference to the database
         const db = firebase.database();
 
-        // Function to fetch and display hive data
         function fetchHiveData() {
-            console.log('Fetching hive data...');
+            console.log('Listening for hive data changes...');
             db.ref('hives').on('value', (snapshot) => {
                 const hives = snapshot.val();
                 console.log('Hive data:', JSON.stringify(hives, null, 2));
                 const hiveTableBody = document.getElementById('hiveTableBody');
                 hiveTableBody.innerHTML = '';
-                for (const hiveId in hives) {
-                    if (hives.hasOwnProperty(hiveId)) {
-                        const hive = hives[hiveId];
-                        console.log(`Hive ${hiveId} data:`, JSON.stringify(hive, null, 2));
-                        
-                        // Access the values directly
-                        const temperature = hive.temperature !== undefined ? hive.temperature.value : 'N/A';
-                        const humidity = hive.humidity !== undefined ? hive.humidity.value : 'N/A';
-                        const soundLevel = hive.soundLevel !== undefined ? hive.soundLevel.value : 'N/A';
-                        const weight = hive.weight !== undefined ? hive.weight.value : 'N/A';
 
-                        const row = `
-                            <tr>
-                                <td>${hiveId}</td>
-                                <td>${temperature}</td>
-                                <td>${humidity}</td>
-                                <td>${soundLevel}</td>
-                                <td>${weight}</td>
-                            </tr>
-                        `;
-                        hiveTableBody.innerHTML += row;
+                if (hives) {
+                    for (const hiveId in hives) {
+                        if (hives.hasOwnProperty(hiveId)) {
+                            const hive = hives[hiveId];
+                            console.log(`Hive ${hiveId} data:`, JSON.stringify(hive, null, 2));
+
+                            // Access the latest temperature
+                            const temperatureEntries = hive.temperature || {};
+                            const latestTemperature = getLatestValue(temperatureEntries);
+
+                            // Access the latest humidity
+                            const humidityEntries = hive.humidity || {};
+                            const latestHumidity = getLatestValue(humidityEntries);
+
+                            // Access the latest sound level
+                            const soundEntries = hive.soundValue || {};
+                            const latestSound = getLatestValue(soundEntries);
+
+                            const weight = hive.weight ? hive.weight.value : 'N/A';
+
+                            const row = `
+                                <tr>
+                                    <td>${hiveId}</td>
+                                    <td>${latestTemperature}</td>
+                                    <td>${latestHumidity}</td>
+                                    <td>${latestSound}</td>
+                                    <td>${weight}</td>
+                                </tr>
+                            `;
+                            hiveTableBody.innerHTML += row;
+                        }
                     }
+                } else {
+                    hiveTableBody.innerHTML = '<tr><td colspan="5">No hive data available</td></tr>';
                 }
             });
         }
 
-        // Call fetchHiveData when the page loads
-        window.onload = fetchHiveData;
+        function getLatestValue(entries) {
+            const entryKeys = Object.keys(entries);
+            if (entryKeys.length === 0) return 'N/A';
 
-        // Placeholder function to add a new hive (implement as needed)
-        function addNewHive() {
-            // Code to add a new hive
-            console.log('Add new hive functionality goes here.');
+            // Sort keys to find the latest entry
+            const latestKey = entryKeys.sort().pop(); // Get the last key
+            return entries[latestKey]; // Return the value of the latest entry
         }
+
+        window.onload = fetchHiveData;
     </script>
 </body>
 </html>
