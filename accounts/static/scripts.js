@@ -119,3 +119,21 @@ document.addEventListener('DOMContentLoaded', () => {
 // Render the chart
 const ctx = document.getElementById('humidityTemperatureChart').getContext('2d');
 const humidityTemperatureChart = new Chart(ctx, config);
+
+// interactive_sidebar.js
+
+document.addEventListener("DOMContentLoaded", function() {
+    const sidebar = document.getElementById('sidebar');
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuItems = document.querySelectorAll('.menu-item');
+
+    menuToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('minimized');
+    });
+
+    menuItems.forEach(item => {
+        item.addEventListener('click', function() {
+            sidebar.classList.add('minimized');
+        });
+    });
+});
