@@ -1,135 +1,128 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hives</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="sidebar">
-            <div class="image-container">
-                <img src="{% static 'images/SmartNyuki.png' %}" alt="Company Logo" class="responsive-image">
-            </div>
-            <div class="sidebar-menu">
-                <ul>
-                    <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="{% url 'hives' %}" class="active"><i class="fas fa-box"></i> Hives</a></li>
-                    <li><a href="{% url 'subscription' %}"><i class="fas fa-credit-card"></i> Subscription</a></li>
-                    <li><a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a></li>
-                    <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Log Out</a></li>
-                </ul>
-            </div>
-            <div class="documentation">
-                <p>Need help? Please check our docs</p>
-                <button>Documentation</button>
-            </div>
-        </div>
-        <div class="main-content">
-            <div class="header">
-                <h1>HIVES</h1>
-            </div>
-            <div class="content">
-                <div class="hive-info">
-                    <div class="hive">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Hive</th>
-                                    <th>Temperature(C)</th>
-                                    <th>Humidity(%)</th>
-                                    <th>Sound(dB)</th>
-                                    <th>Weight(kgs)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="hiveTableBody">
-                                <!-- Hive data will be populated here from Firebase -->
-                            </tbody>
-                        </table>
+    <div class="container-fluid">
+        <div class="row">
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="sidebar-sticky pt-3">
+                    <div class="image-container text-center mb-3">
+                        <img src="{% static 'images/SmartNyuki.png' %}" alt="Company Logo" class="img-fluid">
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'dashboard' %}">
+                                <i class="fas fa-home"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'hives' %}">
+                                <i class="fas fa-box"></i>
+                                Hives
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'subscription' %}">
+                                <i class="fas fa-credit-card"></i>
+                                Subscription
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'profile' %}">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Log Out
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="documentation text-center mt-4">
+                        <p>Need help? Please check our docs</p>
+                        <button class="btn btn-warning">Documentation</button>
                     </div>
                 </div>
-                <button onclick="addNewHive()">Add New Hive</button>
-            </div>
-            <div class="footer">
-                &copy; 2024 Smart Nyuki. All Rights Reserved. <a href="https://www.smartabee.netlify.app.com">Privacy Policy</a>
-            </div>
+            </nav>
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Dashboard</h1>
+                    <button id="menu-toggle" class="btn btn-primary d-md-none">
+                        ☰
+                    </button>
+                </div>
+                <div class="content">
+                    <div class="overview row">
+                        <div class="col-md-6 mb-4">
+                            <div class="overview-item card">
+                                <div class="card-body">
+                                    <h3 class="card-title">Active Beehives</h3>
+                                    <p class="card-text">{{ active_beehives }} 10 HIVES</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="overview-item card">
+                                <div class="card-body">
+                                    <h3 class="card-title">Honey Harvested</h3>
+                                    <p class="card-text">{{ honey_harvested }} 50 kgs</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="charts row">
+                        <div class="col-md-6 mb-4">
+                            <div class="chart card">
+                                <div class="card-body">
+                                    <h3 class="card-title">Overview</h3>
+                                    <canvas id="overviewChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="chart card">
+                                <div class="card-body">
+                                    <h3 class="card-title">Temperature</h3>
+                                    <canvas id="temperatureChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="chart card">
+                                <div class="card-body">
+                                    <h3 class="card-title">Relative Humidity</h3>
+                                    <canvas id="humidityChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer mt-5">
+                    &copy; 2024 Smart Nyuki. All Rights Reserved. <a href="https://www.smartabee.netlify.app.com">Privacy Policy</a>
+                </div>
+            </main>
         </div>
     </div>
     <script>
-        const firebaseConfig = {
-            databaseURL: "https://project-login2-6c049-default-rtdb.europe-west1.firebasedatabase.app/",
-            apiKey: "AIzaSyCiraum9gVPXkgP3KgEXk3WMhEb64XZjZE",
-            authDomain: "project-login2-6c049.firebaseapp.com",
-            projectId: "project-login2-6c049",
-            storageBucket: "project-login2-6c049.appspot.com",
-            messagingSenderId: "865918979599",
-            appId: "1:865918979599:web:b0cb8e55945a81921d9d7a"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        function fetchHiveData() {
-            console.log('Listening for hive data changes...');
-            db.ref('hives').on('value', (snapshot) => {
-                const hives = snapshot.val();
-                console.log('Hive data:', JSON.stringify(hives, null, 2));
-                const hiveTableBody = document.getElementById('hiveTableBody');
-                hiveTableBody.innerHTML = '';
-
-                if (hives) {
-                    for (const hiveId in hives) {
-                        if (hives.hasOwnProperty(hiveId)) {
-                            const hive = hives[hiveId];
-                            console.log(`Hive ${hiveId} data:`, JSON.stringify(hive, null, 2));
-
-                            // Access the latest temperature
-                            const temperatureEntries = hive.temperature || {};
-                            const latestTemperature = getLatestValue(temperatureEntries);
-
-                            // Access the latest humidity
-                            const humidityEntries = hive.humidity || {};
-                            const latestHumidity = getLatestValue(humidityEntries);
-
-                            // Access the latest sound level
-                            const soundEntries = hive.soundValue || {};
-                            const latestSound = getLatestValue(soundEntries);
-
-                            const weight = hive.weight ? hive.weight.value : 'N/A';
-
-                            const row = `
-                                <tr>
-                                    <td>${hiveId}</td>
-                                    <td>${latestTemperature}</td>
-                                    <td>${latestHumidity}</td>
-                                    <td>${latestSound}</td>
-                                    <td>${weight}</td>
-                                </tr>
-                            `;
-                            hiveTableBody.innerHTML += row;
-                        }
-                    }
-                } else {
-                    hiveTableBody.innerHTML = '<tr><td colspan="5">No hive data available</td></tr>';
-                }
-            });
-        }
-
-        function getLatestValue(entries) {
-            const entryKeys = Object.keys(entries);
-            if (entryKeys.length === 0) return 'N/A';
-
-            // Sort keys to find the latest entry
-            const latestKey = entryKeys.sort().pop(); // Get the last key
-            return entries[latestKey]; // Return the value of the latest entry
-        }
-
-        window.onload = fetchHiveData;
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('show');
+        });
     </script>
 </body>
 </html>
